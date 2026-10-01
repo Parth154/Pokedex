@@ -1,0 +1,136 @@
+<section class="pokedex-shell">
+  <div class="toolbar card">
+    <label class="search-field">
+      <span>Search</span>
+      <input
+        type="text"
+        [value]="search()"
+        (input)="onSearchChange(($any($event.target).value || ''))"
+        placeholder="Search by name or type"
+      />
+    </label>
+
+    <label class="search-field small">
+      <span>Type</span>
+      <select [value]="typeFilter()" (change)="onTypeChange(($any($event.target).value || 'all'))">
+        <option value="all">All types</option>
+        @for (type of typeOptions(); track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="search-field small">
+      <span>Page size</span>
+      <select [value]="pageSize()" (change)="onPageSizeChange(+$any($event.target).value)">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </label>
+  </div>
+
+  @if (loading()) {
+    <div class="status card">
+      <div class="loading-row"></div>
+      <div class="loading-row short"></div>
+      <div class="loading-row"></div>
+      <div class="loading-row short"></div>
+    </div>
+  } @else if (error()) {
+    <div class="status card error-state">
+      <p>{{ error() }}</p>
+      <button type="button" class="retry-button" (click)="retryLoad()">Retry</button>
+    </div>
+  } @else if (!rows().length) {
+    <div class="status card empty-state">
+      <p>No Pokémon match the current filters.</p>
+    </div>
+  } @else {
+    <div class="table-wrap card">
+      <table class="pokedex-table">
+        <thead>
+          <tr>
+            <th>Sprite</th>
+            <th>
+              <button type="button" class="sort-button" (click)="onSortChange('name')">Name</button>
+            </th>
+            <th>Types</th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('hp')">HP</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('attack')">Atk</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('defense')">Def</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('specialAttack')">Sp. Atk</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('specialDefense')">Sp. Def</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('speed')">Speed</button></th>
+            <th><button type="button" class="sort-button" (click)="onSortChange('total')">Total</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pokemon of rows(); track pokemon.id) {
+            <tr (click)="selectPokemon(pokemon)" class="row-entry">
+              <td><img [src]="pokemon.spriteUrl" [alt]="pokemon.name" /></td>
+              <td>{{ pokemon.name | titlecase }}</td>
+              <td>
+                <div class="type-badges">
+                  @for (type of pokemon.types; track type) {
+                    <span class="type-badge" [ngClass]="type">{{ type }}</span>
+                  }
+                </div>
+              </td>
+              <td>{{ pokemon.stats.hp }}</td>
+              <td>{{ pokemon.stats.attack }}</td>
+              <td>{{ pokemon.stats.defense }}</td>
+              <td>{{ pokemon.stats.specialAttack }}</td>
+              <td>{{ pokemon.stats.specialDefense }}</td>
+              <td>{{ pokemon.stats.speed }}</td>
+              <td>{{ pokemon.stats.total }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (selectedPokemon()) {
+    <aside class="detail-panel card">
+      @if (detailLoading()) {
+        <div class="detail-loading">Loading details…</div>
+      } @else if (detailError()) {
+        <div class="error-state">
+          <p>{{ detailError() }}</p>
+        </div>
+      } @else {
+        <div class="detail-header">
+          <img [src]="selectedPokemon()?.spriteUrl" [alt]="selectedPokemon()?.name" />
+          <div>
+            <p class="eyebrow">Selected Pokémon</p>
+            <h3>{{ selectedPokemon()?.name | titlecase }}</h3>
+          </div>
+        </div>
+
+        <div class="meta-grid">
+          <div><span>Height</span><strong>{{ selectedPokemon()?.height ?? 0 }} dm</strong></div>
+          <div><span>Weight</span><strong>{{ selectedPokemon()?.weight ?? 0 }} hg</strong></div>
+        </div>
+
+        <div class="chart-wrapper">
+          <svg viewBox="0 0 200 200" class="radar-chart" aria-label="Pokémon stat radar chart">
+            <g>
+              <polygon class="radar-grid" points="100,28 164,60 164,140 100,172 36,140 36,60" />
+              <polygon class="radar-grid" points="100,48 142,70 142,130 100,152 58,130 58,70" />
+              <polygon class="radar-grid" points="100,68 120,100 100,132 80,100" />
+              <line x1="100" y1="100" x2="100" y2="28" />
+              <line x1="100" y1="100" x2="164" y2="60" />
+              <line x1="100" y1="100" x2="164" y2="140" />
+              <line x1="100" y1="100" x2="100" y2="172" />
+              <line x1="100" y1="100" x2="36" y2="140" />
+              <line x1="100" y1="100" x2="36" y2="60" />
+              <polygon class="radar-shape" [attr.points]="radarPoints()" />
+              <circle cx="100" cy="100" r="4" class="radar-point" />
+            </g>
+          </svg>
+        </div>
+      }
+    </aside>
+  }
+</section>

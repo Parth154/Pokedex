@@ -1,0 +1,90 @@
+<section class="team-builder card">
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Team builder</p>
+      <h2>Build your squad</h2>
+    </div>
+  </div>
+
+  <form [formGroup]="teamForm" (ngSubmit)="onSubmit()" class="team-form">
+    <label class="field">
+      <span>Team name</span>
+      <input formControlName="name" type="text" placeholder="e.g. Kanto Storm" />
+    </label>
+
+    @if (teamForm.controls.name.invalid && (teamForm.controls.name.dirty || teamForm.controls.name.touched)) {
+      <div class="field-error">
+        @if (teamForm.controls.name.hasError('required')) {
+          <span>Team name is required.</span>
+        }
+        @if (teamForm.controls.name.hasError('minlength')) {
+          <span>Name must be at least 3 characters.</span>
+        }
+        @if (teamForm.controls.name.hasError('maxlength')) {
+          <span>Name must be 30 characters or fewer.</span>
+        }
+        @if (teamForm.controls.name.hasError('duplicateTeamName')) {
+          <span>Team name already exists.</span>
+        }
+      </div>
+    }
+
+    <div class="autocomplete">
+      <label class="field">
+        <span>Search Pokémon</span>
+        <input
+          type="text"
+          [value]="searchTerm()"
+          (input)="onSuggestionQueryChange(($any($event.target).value || '').trim())"
+          placeholder="Type a Pokémon name"
+        />
+      </label>
+
+      @if (suggestionLoading()) {
+        <div class="helper-state">Loading suggestions…</div>
+      } @else if (suggestionError()) {
+        <div class="helper-state error">
+          {{ suggestionError() }}
+          <button type="button" class="inline-button" (click)="onSuggestionQueryChange(searchTerm())">Retry</button>
+        </div>
+      } @else if (searchTerm().trim()) {
+        <div class="suggestion-list">
+          @for (pokemon of availableSuggestions(); track pokemon.id) {
+            <button type="button" class="suggestion-item" (click)="addPokemon(pokemon)">
+              <img [src]="pokemon.spriteUrl" [alt]="pokemon.name" />
+              <span>{{ pokemon.name | titlecase }}</span>
+            </button>
+          }
+          @if (!availableSuggestions().length) {
+            <div class="helper-state empty">No matches found.</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="selection-panel">
+      <div class="chip-list">
+        @for (pokemon of selectedPokemon(); track pokemon.id) {
+          <div class="chip">
+            <span>{{ pokemon.name | titlecase }}</span>
+            <button type="button" class="chip-remove" (click)="removePokemon(pokemon.id)">×</button>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (teamForm.controls.pokemonIds.invalid && (teamForm.controls.pokemonIds.dirty || teamForm.controls.pokemonIds.touched)) {
+      <div class="field-error">
+        <span>Select between 1 and 6 Pokémon.</span>
+      </div>
+    }
+
+    @if (teamError() !== null) {
+      <div class="field-error">{{ teamError() }}</div>
+    }
+
+    <button type="submit" class="primary-button" [disabled]="teamForm.invalid || teamForm.pristine">
+      Save team
+    </button>
+  </form>
+</section>
