@@ -1,0 +1,242 @@
+:host {
+  display: block;
+}
+
+.pokedex-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 16px 24px rgba(15, 23, 42, 0.18);
+}
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  display: grid;
+  gap: 0.4rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.search-field.small {
+  max-width: 180px;
+}
+
+.search-field input,
+.search-field select {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.65);
+  color: #e2e8f0;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.status {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.error-state {
+  color: #fca5a5;
+}
+
+.empty-state {
+  color: #cbd5e1;
+}
+
+.retry-button {
+  background: rgba(96, 165, 250, 0.18);
+  color: #dbeafe;
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  border-radius: 999px;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+.pokedex-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e2e8f0;
+}
+
+.pokedex-table th,
+.pokedex-table td {
+  padding: 0.75rem 0.7rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  text-align: left;
+}
+
+.pokedex-table th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #93c5fd;
+}
+
+.row-entry {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.row-entry:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.row-entry img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.type-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.type-badge {
+  display: inline-flex;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(148, 163, 184, 0.18);
+  color: #f8fafc;
+}
+
+.sort-button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.detail-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.detail-header img {
+  width: 72px;
+  height: 72px;
+}
+
+.detail-header h3 {
+  margin: 0.2rem 0 0;
+  font-size: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.meta-grid div {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.meta-grid span {
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.chart-wrapper {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.radar-chart {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.radar-grid {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.35);
+  stroke-width: 1;
+}
+
+.radar-shape {
+  fill: rgba(96, 165, 250, 0.34);
+  stroke: #93c5fd;
+  stroke-width: 2;
+  transform-origin: center;
+  animation: radar-grow 0.8s ease-in-out;
+}
+
+.radar-point {
+  fill: #f8fafc;
+}
+
+@keyframes radar-grow {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.82);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.loading-row {
+  width: 100%;
+  height: 18px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(51,65,85,0.8), rgba(71,85,105,0.9), rgba(51,65,85,0.8));
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+.loading-row.short {
+  max-width: 60%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

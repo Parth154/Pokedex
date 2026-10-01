@@ -6,8 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:pokedex": "node dist/pokedex/server/server.mjs"
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "serve:ssr:pokedex": "node dist/pokedex/server/server.mjs",
+    "mock:server": "npx json-graphql-server db.js --port 4000"
   },
   "private": true,
   "packageManager": "npm@11.19.0",
@@ -20,7 +21,9 @@
     "@angular/platform-server": "^22.2.0",
     "@angular/router": "^22.2.0",
     "@angular/ssr": "^22.2.1",
+    "chart.js": "^4.4.3",
     "express": "^5.1.0",
+    "ng2-charts": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -31,6 +34,7 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.12.0",
     "jsdom": "^30.0.0",
+    "json-graphql-server": "^2.3.2",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
